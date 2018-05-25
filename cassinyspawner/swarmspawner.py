@@ -41,6 +41,8 @@ class SwarmSpawner(Spawner):
 
     threadpool_workers = Int(
         5 * multiprocessing.cpu_count(),
+        min=1,
+        max=12,
         config=True,
         help=dedent(
             """
@@ -52,8 +54,10 @@ class SwarmSpawner(Spawner):
     )
 
     @property
-    def executor(self, max_workers=threadpool_workers):
+    def executor(self, max_workers=1):
         """single global executor"""
+        if self.threadpool_workers:
+            max_workers = self.threadpool_workers
         cls = self.__class__
         if cls._executor is None:
             cls._executor = ThreadPoolExecutor(max_workers)
