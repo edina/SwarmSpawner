@@ -1,2 +1,2 @@
 docker==3.3.0
-jupyterhub==0.8.1
+jupyterhub==0.7.2

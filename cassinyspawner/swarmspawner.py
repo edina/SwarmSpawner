@@ -5,6 +5,7 @@ server in a separate Docker Service
 
 import hashlib
 from textwrap import dedent
+import multiprocessing
 from concurrent.futures import ThreadPoolExecutor
 from pprint import pformat
 
@@ -38,8 +39,20 @@ class SwarmSpawner(Spawner):
 
     _executor = None
 
+    threadpool_workers = Int(
+        5 * multiprocessing.cpu_count(),
+        config=True,
+        help=dedent(
+            """
+        Number of threads in thread pool used to talk to the swarm API.
+        Increase this if you are dealing with a very large number of users.
+        Defaults to `5 * cpu_cores`, which is the default for `ThreadPoolExecutor`.
+        """
+        )
+    )
+
     @property
-    def executor(self, max_workers=1):
+    def executor(self, max_workers=threadpool_workers):
         """single global executor"""
         cls = self.__class__
         if cls._executor is None:
