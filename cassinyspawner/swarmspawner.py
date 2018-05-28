@@ -40,9 +40,8 @@ class SwarmSpawner(Spawner):
     _executor = None
 
     threadpool_workers = Int(
-        5 * multiprocessing.cpu_count(),
+        4 * multiprocessing.cpu_count(),
         min=1,
-        max=12,
         config=True,
         help=dedent(
             """
